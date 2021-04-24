@@ -13,7 +13,7 @@ tokens = (
 
 # Tokens
 t_HEAD = r'-'
-t_TITLE = r'[a-zA-Z][a-zA-Z]*'
+t_TITLE = r'([\u4e00-\u9fa5]|[a-zA-Z])([\u4e00-\u9fa5]|[a-zA-Z])*'
 t_COLON = r':'
 t_INDENT = r'\t+'
 
@@ -94,7 +94,7 @@ def parse_bookmarks(file_path):
 	lexer = lex.lex()
 	parser = yacc.yacc(start='lines')
 
-	with open(file_path, 'r') as f:
+	with open(file_path, 'r', encoding='utf-8') as f:
 		data = f.read().replace('\n', '')
 		lexer.input(data)
 		result = parser.parse(data)
