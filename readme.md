@@ -15,8 +15,8 @@ $ python install.py
 from bookmarker import AddBookmarksInPDF
 
 if __name__ == '__main__':
-	pdf_file = 'your_pdf_file.pdf'
-	AddBookmarksInPDF(pdf_file, 'your_rule.txt')
+    pdf_file = 'your_pdf_file.pdf'
+    AddBookmarksInPDF(pdf_file, 'your_rule.txt')
 ```
 
 ## Note
