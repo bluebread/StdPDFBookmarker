@@ -112,10 +112,9 @@ def AddBookmarksInPDF(pdf_file, bm_file):
 			ref = writer.addBookmark(title, page_num, parent=parent)
 			recursive_add_bookmarks(child_bookmarks, parent=ref)
 
-	with open(pdf_file, 'rb') as f:
+	with open(pdf_file, 'rb+') as f:
 		reader = PdfFileReader(f, strict=False)
 		writer.appendPagesFromReader(reader)
 		recursive_add_bookmarks(bookmarks)
-
-	with open(pdf_file, 'wb') as f:
 		writer.write(f)
+
