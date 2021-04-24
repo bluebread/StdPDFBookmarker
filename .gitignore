@@ -1,0 +1,7 @@
+/.vscode
+/__pycache__
+
+*.pdf
+*.txt
+!example_rule.txt
+test.py
