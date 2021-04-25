@@ -12,8 +12,8 @@ tokens = (
 )
 
 # Tokens
-t_HEAD = r'-'
-t_TITLE = r'([\u4e00-\u9fa5]|[a-zA-Z])([\u4e00-\u9fa5]|[a-zA-Z])*'
+# t_HEAD = r'-'
+# t_TITLE = r'([\u4e00-\u9fa5]|[a-zA-Z]|_)([\u4e00-\u9fa5]|[a-zA-Z]|_)*'
 t_COLON = r':'
 t_INDENT = r'\t+'
 
@@ -23,6 +23,11 @@ t_ignore  = ' '
 def t_NUMBER(t):
 	r'\d+'
 	t.value = int(t.value)
+	return t
+
+def t_TITLE(t):
+	r'-([\u4e00-\u9fa5]|[a-zA-Z]|[_,.\'\" ]|[0-9])([\u4e00-\u9fa5]|[a-zA-Z]|[_,.\'\" ]|[0-9])*'
+	t.value = t.value.strip('- ')
 	return t
 
 # Define a rule so we can track line numbers
@@ -41,8 +46,8 @@ def p_empty(p):
 	p[0] = None
 
 def p_bookmark(p):
-	'bookmark : HEAD TITLE COLON NUMBER'
-	p[0] = (p[2], p[4], [])
+	'bookmark : TITLE COLON NUMBER'
+	p[0] = (p[1], p[3], [])
 
 def p_indent(p):
 	'''indent : INDENT 
@@ -96,6 +101,7 @@ def parse_bookmarks(file_path):
 
 	with open(file_path, 'r', encoding='utf-8') as f:
 		data = f.read().replace('\n', '')
+		print(data)
 		lexer.input(data)
 		result = parser.parse(data)
 		tree = build_tree(result, 0)
@@ -109,7 +115,7 @@ def AddBookmarksInPDF(pdf_file, bm_file):
 
 	def recursive_add_bookmarks(bookmarks, parent=None):
 		for title, page_num, child_bookmarks in bookmarks:
-			ref = writer.addBookmark(title, page_num, parent=parent)
+			ref = writer.addBookmark(title, page_num - 1, parent=parent)
 			recursive_add_bookmarks(child_bookmarks, parent=ref)
 
 	with open(pdf_file, 'rb+') as f:
@@ -118,3 +124,17 @@ def AddBookmarksInPDF(pdf_file, bm_file):
 		recursive_add_bookmarks(bookmarks)
 		writer.write(f)
 
+if __name__ == '__main__':
+	with open('rule.txt', 'r', encoding='utf-8') as f:
+		data = f.read().replace('\n', '')
+		# Build the lexer
+		lexer = lex.lex()
+		# Give the lexer some input
+		lexer.input(data)
+
+		# Tokenize
+		while True:
+			tok = lexer.token()
+			if not tok:
+				break      # No more input
+			print(tok)

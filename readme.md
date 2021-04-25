@@ -23,3 +23,4 @@ if __name__ == '__main__':
 
 Syntax of rule file is like some nested memo list.  
 In your rule file, be careful that all of indents MUST be '\t' (not 4 or 2 spaces ' ') in every single line.
+All '_' symbols in title of a bookmark will be replaced by space.
