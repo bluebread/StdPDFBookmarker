@@ -5,6 +5,7 @@
 Before you use, you must install PLY package first. The package has been contained in this project already.
 
 ```shell
+$ git clone https://github.com/dabeaz/ply.git
 $ cd ./ply
 $ python install.py
 ```
