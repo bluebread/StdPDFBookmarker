@@ -5,15 +5,12 @@ import ply.yacc as yacc
 
 tokens = (
 	'NUMBER',
-	'HEAD',
 	'TITLE',
 	'COLON',
 	'INDENT'
 )
 
 # Tokens
-# t_HEAD = r'-'
-# t_TITLE = r'([\u4e00-\u9fa5]|[a-zA-Z]|_)([\u4e00-\u9fa5]|[a-zA-Z]|_)*'
 t_COLON = r':'
 t_INDENT = r'\t+'
 
@@ -21,13 +18,13 @@ t_INDENT = r'\t+'
 t_ignore  = ' '
 
 def t_NUMBER(t):
-	r'\d+'
+	r'[-\+]?\d+'
 	t.value = int(t.value)
 	return t
 
 def t_TITLE(t):
-	r'-([\u4e00-\u9fa5]|[a-zA-Z]|[_,.\'\" ]|[0-9])([\u4e00-\u9fa5]|[a-zA-Z]|[_,.\'\" ]|[0-9])*'
-	t.value = t.value.strip('- ')
+	r'\#([\u4e00-\u9fa5\u3000-\u303f]|[a-zA-Z]|[_,.\'\" \[\]\{\}]|[-\+]|[0-9])+(?=:)'
+	t.value = t.value.strip('\# ')
 	return t
 
 # Define a rule so we can track line numbers
@@ -69,7 +66,7 @@ def p_lines(p):
 
 # Error rule for syntax errors
 def p_error(p):
-    print("Syntax error in input!")
+	print("Syntax error in input!")
 
 # Build Tree structure
 def build_tree(result, ind):
@@ -109,13 +106,13 @@ def parse_bookmarks(file_path):
 	return tree
 
 
-def AddBookmarksInPDF(pdf_file, bm_file):
+def AddBookmarksInPDF(pdf_file, bm_file, base_num=0):
 	writer = PdfFileWriter()
 	bookmarks = parse_bookmarks(bm_file)
 
 	def recursive_add_bookmarks(bookmarks, parent=None):
 		for title, page_num, child_bookmarks in bookmarks:
-			ref = writer.addBookmark(title, page_num - 1, parent=parent)
+			ref = writer.addBookmark(title, page_num - 1 + base_num, parent=parent)
 			recursive_add_bookmarks(child_bookmarks, parent=ref)
 
 	with open(pdf_file, 'rb+') as f:
