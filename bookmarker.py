@@ -23,7 +23,8 @@ def t_NUMBER(t):
 	return t
 
 def t_TITLE(t):
-	r'\#([\u4e00-\u9fa5\u3000-\u303f]|[a-zA-Z]|[_,.\'\" \[\]\{\}]|[-\+]|[0-9])+(?=:)'
+	# r'\#([\u4e00-\u9fa5\u3000-\u303f]|[a-zA-Z]|[_,\.\'\" ’=-–\[\]\{\}]|[-\+]|[0-9])+(?=:)'
+	r'\#.+?(?=:)'
 	t.value = t.value.strip('\# ')
 	return t
 
@@ -122,7 +123,7 @@ def AddBookmarksInPDF(pdf_file, bm_file, base_num=0):
 		writer.write(f)
 
 if __name__ == '__main__':
-	with open('rule.txt', 'r', encoding='utf-8') as f:
+	with open('logic_rule.txt', 'r', encoding='utf-8') as f:
 		data = f.read().replace('\n', '')
 		# Build the lexer
 		lexer = lex.lex()

@@ -1,6 +1,6 @@
 from bookmarker import AddBookmarksInPDF
 
-pdf_file = '数理逻辑：基本原理与形式演算.pdf'
-bm_file = 'rule.txt'
+pdf_file = 'Hedman. A First Course in Logic, 2004 (Oxford).pdf'
+bm_file = 'logic_rule.txt'
 
-AddBookmarksInPDF(pdf_file, bm_file, 13)
+AddBookmarksInPDF(pdf_file, bm_file, 21)
